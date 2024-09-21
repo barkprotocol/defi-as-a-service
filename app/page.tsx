@@ -34,7 +34,7 @@ export default function BARKBlinkLanding() {
   useEffect(() => {
     const interval = setInterval(() => {
       setBlinkText(prev => prev === 'BLINK' ? '' : 'BLINK');
-    }, 500);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -95,21 +95,30 @@ export default function BARKBlinkLanding() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-32 px-4 sm:px-6 lg:px-8 text-center">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-            <span className="block">Revolutionize Solana Interactions</span>
-            <span className="block text-primary">with BARK Blink</span>
-          </h1>
-          <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-            BARK Blink empowers developers to create lightning-fast Solana actions and blink applications. Streamline your blockchain development with our powerful Blink As A Service platform.
-          </p>
-          <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-            <Button className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">Start Building</Button>
-            <Button variant="outline" className="mt-3 w-full sm:w-auto sm:ml-3 sm:mt-0">Explore Blinkboard</Button>
-          </div>
-        </div>
-      </section>
+<section className="relative bg-gray-50 pt-20 pb-32 px-4 sm:px-6 lg:px-8 text-center">
+  <div className="absolute inset-0">
+    <img
+      src="https://ucarecdn.com/750e9f1b-edfc-4ac8-a5b4-3286c7de98d6/barkmascottrasparentbg.png"
+      alt="Background"
+      className="w-fit h-fit object-cover opacity-10" // Adjust opacity for a subtle background effect
+    />
+  </div>
+  
+  <div className="relative max-w-7xl mx-auto">
+    <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+      <span className="block">Revolutionize Solana Interactions</span>
+      <span className="block text-primary">with BARK Blink</span>
+    </h1>
+    <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+      BARK Blink empowers developers to create lightning-fast Solana actions and blink applications. Streamline your blockchain development with our powerful Blink As A Service platform.
+    </p>
+
+    <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+      <Button className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">Start Building</Button>
+      <Button variant="outline" className="mt-3 w-full sm:w-auto sm:ml-3 sm:mt-0">Explore Blinkboard</Button>
+    </div>
+  </div>
+</section>
 
       {/* Features Section */}
       <section className="py-20 bg-gray-50">
@@ -227,23 +236,27 @@ export default function BARKBlinkLanding() {
 </section>
 
 {/* Footer */}
-<footer className="bg-gray-800 py-8">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+<footer className="bg-white py-6">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <div className="flex justify-center space-x-4">
-      {[
-        { icon: faTwitter, label: "Twitter" },
-        { icon: faDiscord, label: "Discord" },
-        { icon: faGithub, label: "GitHub" },
-        { icon: faMedium, label: "Medium" },
-      ].map(({ icon, label }) => (
-        <a key={label} href="#" aria-label={label}>
-          <FontAwesomeIcon icon={icon} className="h-5 w-5" />
-        </a>
-      ))}
     </div>
-    <p className="mt-4 text-sm">&copy; 2024 BARK Protocol. All rights reserved.</p>
+    <div className="mt-4 flex justify-center space-x-4">
+      <a href="https://twitter.com/bark_protocol" target="_blank" rel="noopener noreferrer">
+        <FontAwesomeIcon icon={faTwitter} className="text-gray-600 hover:text-gray-900 cursor-pointer" />
+      </a>
+      <a href="https://discord.gg/your_invite" target="_blank" rel="noopener noreferrer">
+        <FontAwesomeIcon icon={faDiscord} className="text-gray-600 hover:text-gray-900 cursor-pointer" />
+      </a>
+      <a href="https://github.com/barkprotocol/blink-as-a-service" target="_blank" rel="noopener noreferrer">
+        <FontAwesomeIcon icon={faGithub} className="text-gray-600 hover:text-gray-900 cursor-pointer" />
+      </a>
+      <a href="https://medium.com/@barkprotocol" target="_blank" rel="noopener noreferrer">
+        <FontAwesomeIcon icon={faMedium} className="text-gray-600 hover:text-gray-900 cursor-pointer" />
+      </a>
+    </div>
+    <p className="text-gray-600 mt-4">© 2024 BARK Protocol. All rights reserved.</p>
   </div>
 </footer>
-    </div>
+   </div>
   );
 }
