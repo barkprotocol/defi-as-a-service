@@ -121,9 +121,11 @@ export default function BARKBlinkLanding() {
             <span className="ml-2 text-xl font-bold text-gray-800 dark:text-white">BARK <span className="blink text-primary">{blinkText}</span></span>
           </div>
           <div className="flex items-center space-x-4">
+            <Link href="/#" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Home</Link>
             <Link href="/features" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Features</Link>
-            <Link href="/pricing" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Pricing</Link>
-            <Link href="/docs" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Documentation</Link>
+            <Link href="/pages/services" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Services</Link>
+            <Link href="/#" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">FAQ</Link>
+            <Link href="https://gitbook.com/" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Documentation</Link>
             <WalletConnect />
             <Button onClick={toggleTheme} variant="ghost" size="icon">
               {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
