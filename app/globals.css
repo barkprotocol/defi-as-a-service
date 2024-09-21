@@ -135,10 +135,6 @@
   }
 
   /* Accessibility Enhancements */
-  body {
-    @apply text-muted-foreground;
-  }
-
   .text-link {
     @apply text-primary underline hover:text-primary-foreground;
   }

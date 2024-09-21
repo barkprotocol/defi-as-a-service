@@ -34,7 +34,7 @@ export default function BARKBlinkLanding() {
   useEffect(() => {
     const interval = setInterval(() => {
       setBlinkText(prev => prev === 'BLINK' ? '' : 'BLINK');
-    }, 1000);
+    }, 500);
     return () => clearInterval(interval);
   }, []);
 
@@ -88,7 +88,7 @@ export default function BARKBlinkLanding() {
             </div>
             <div className="flex items-center">
               <Button variant="ghost" className="text-gray-600 hover:text-gray-900">Documentation</Button>
-              <Button className="ml-4 bg-primary text-primary-foreground hover:bg-primary/90">Get Started</Button>
+              <Button className="ml-4 bg-primary text-primary-foreground hover:bg-primary/90">Select Wallet</Button>
             </div>
           </div>
         </div>
@@ -98,9 +98,9 @@ export default function BARKBlinkLanding() {
 <section className="relative bg-gray-50 pt-20 pb-32 px-4 sm:px-6 lg:px-8 text-center">
   <div className="absolute inset-0">
     <img
-      src="https://ucarecdn.com/750e9f1b-edfc-4ac8-a5b4-3286c7de98d6/barkmascottrasparentbg.png"
+      src="https://"
       alt="Background"
-      className="w-fit h-fit object-cover opacity-10" // Adjust opacity for a subtle background effect
+      className="w-full h-full object-cover opacity-5" // Adjust opacity for a subtle background effect
     />
   </div>
   
@@ -148,9 +148,9 @@ export default function BARKBlinkLanding() {
         </div>
       </section>
 
-      {/* Blink Actions and Use Cases Section */}
-<section className="py-20">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {/* Blink Actions and Use Cases Section */}
+    <section className="py-20">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="lg:text-center">
       <h2 className="text-base text-primary font-semibold tracking-wide uppercase">Blink Actions Ecosystem</h2>
       <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
