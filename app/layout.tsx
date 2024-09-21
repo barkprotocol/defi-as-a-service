@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+// Load custom fonts
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -13,11 +14,13 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+// Define metadata for the application
 export const metadata: Metadata = {
   title: "BARK - Blink",
   description: "Blink As A Service dApp",
 };
 
+// Root layout component
 export default function RootLayout({
   children,
 }: Readonly<{
