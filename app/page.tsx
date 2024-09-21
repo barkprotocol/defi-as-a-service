@@ -122,7 +122,7 @@ export default function BARKBlinkLanding() {
           </div>
           <div className="flex items-center space-x-4">
             <Link href="/#" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Home</Link>
-            <Link href="/pages/blink/create-blink" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Create Blink</Link>
+            <Link href="/pages/actions" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Actions</Link>
             <Link href="/pages/services" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Services</Link>
             <Link href="/#" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">FAQ</Link>
             <Link href="https://gitbook.com/" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Documentation</Link>
@@ -152,11 +152,13 @@ export default function BARKBlinkLanding() {
           <div className="mt-5 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Button
               className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
-              onClick={handleSignUp}
+              asChild
             >
-              {isSignedUp ? 'Welcome!' : 'Sign Up Now'}
+              <Link href="/pages/how-it-works">Read More</Link>
             </Button>
-            <Button variant="outline" className="w-full sm:w-auto">Explore Blinkboard</Button>
+            <Button variant="outline" className="w-full sm:w-auto" asChild>
+              <Link href="/pages/dashboard">Explore Blinkboard</Link>
+            </Button>
           </div>
           <div className="mt-12 flex flex-col items-center">
             <Image 

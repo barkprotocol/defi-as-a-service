@@ -1,3 +1,9 @@
+"use client";
+
+export default function Page() {
+  return <h1>How it Works?</h1>
+}
+
 import { CheckCircle, Paintbrush, Puzzle, Rocket } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
