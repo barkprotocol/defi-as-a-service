@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter, faDiscord, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
+import { GlobeAltIcon, UserGroupIcon, ChartBarIcon } from '@heroicons/react/outline';
 import axios from 'axios';
 import {
   ArrowRight,
@@ -139,131 +140,89 @@ export default function BARKBlinkLanding() {
       </section>
 
       {/* Blink Actions and Use Cases Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-primary font-semibold tracking-wide uppercase">Blink Actions Ecosystem</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Powering Next-Gen Solana Applications
-            </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              Explore the diverse range of Solana actions and use cases enabled by BARK Blink. Our platform empowers developers to create innovative blockchain solutions with ease.
-            </p>
+<section className="py-20">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="lg:text-center">
+      <h2 className="text-base text-primary font-semibold tracking-wide uppercase">Blink Actions Ecosystem</h2>
+      <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+        Powering Next-Gen Solana Applications
+      </p>
+      <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+        Explore the diverse range of Solana actions and use cases enabled by BARK Blink. Our platform empowers developers to create innovative blockchain solutions with ease.
+      </p>
+    </div>
+
+    <div className="mt-10">
+      <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+        {[
+          { icon: Gift, name: 'Instant Donations', description: 'Enable seamless, low-fee donations on Solana. Perfect for non-profits, content creators, and fundraising campaigns.' },
+          { icon: Users, name: 'Decentralized Crowdfunding', description: 'Launch and manage crowdfunding campaigns with automatic fund distribution and transparent tracking on the Solana blockchain.' },
+          { icon: CreditCard, name: 'Micro-Payments', description: 'Implement fast, cost-effective micro-payment systems for content monetization, pay-per-use services, and more.' },
+          { icon: Repeat, name: 'Token Swaps', description: 'Create decentralized token swap functionality with optimal routing and minimal slippage on Solana.' },
+        ].map(({ icon: Icon, name, description }, index) => (
+          <div key={index} className="relative flex flex-col bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="flex-shrink-0">
+              <Icon className="h-6 w-6 text-primary" aria-hidden="true" />
+            </div>
+            <div className="mt-3">
+              <p className="text-lg font-medium text-gray-900">{name}</p>
+              <p className="mt-1 text-base text-gray-500">{description}</p>
+            </div>
           </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>
 
-          <div className="mt-10">
-            <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-              {[
-                { icon: Gift, name: 'Instant Donations', description: 'Enable seamless, low-fee donations on Solana. Perfect for non-profits, content creators, and fundraising campaigns.' },
-                { icon: Users, name: 'Decentralized Crowdfunding', description: 'Launch and manage crowdfunding campaigns with automatic fund distribution and transparent tracking on the Solana blockchain.' },
-                { icon: CreditCard, name: 'Micro-Payments', description: 'Implement fast, cost-effective micro-payment systems for content monetization, pay-per-use services, and more.' },
-                { icon: Repeat, name: 'Token Swaps', description: 'Create decentralized token swap functionality with optimal routing and minimal slippage on Solana.' },
-              ].map((item, index) => (
-                <div key={index} className="relative flex flex-col bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-                  <div className="flex-shrink-0">
-                    <item.icon className="h-6 w-6 text-primary" aria-hidden="true" />
-                  </div>
-                  <div className="mt-3">
-                    <p className="text-lg font-medium text-gray-900">{item.name}</p>
-                    <p className="mt-1 text-base text-gray-500">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </section>
+{/* Blinkboard Section */}
+<section className="py-20 bg-gray-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Explore the Blinkboard</h2>
+    <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+      The Blinkboard showcases a variety of Solana applications powered by BARK Blink. Discover innovative use cases and solutions.
+    </p>
+    <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {[
+        { title: "Real-Time Data", description: "Access live data feeds and updates from the Solana blockchain." },
+        { title: "User-Friendly Interface", description: "Navigate through applications effortlessly with our intuitive UI." },
+        { title: "Community Contributions", description: "Explore applications created by our vibrant developer community." },
+      ].map((blinkboardItem, index) => (
+        <Card key={index} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+          <CardContent className="p-6">
+            <h3 className="mt-5 text-lg font-medium text-gray-900">{blinkboardItem.title}</h3>
+            <p className="mt-2 text-base text-gray-500">{blinkboardItem.description}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
+</section>
 
-      {/* Blinkboard Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Explore the Blinkboard</h2>
-          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-            The Blinkboard showcases a variety of Solana applications powered by BARK Blink. Discover innovative use cases and solutions.
-          </p>
-          <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { title: "Real-Time Data", description: "Access live data feeds and updates from the Solana blockchain." },
-              { title: "User-Friendly Interface", description: "Navigate through applications effortlessly with our intuitive UI." },
-              { title: "Community Contributions", description: "Explore applications created by our vibrant developer community." },
-            ].map((blinkboardItem, index) => (
-              <Card key={index} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <CardContent className="p-6">
-                  <h3 className="mt-5 text-lg font-medium text-gray-900">{blinkboardItem.title}</h3>
-                  <p className="mt-2 text-base text-gray-500">{blinkboardItem.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-extrabold text-center text-gray-900 sm:text-4xl mb-8">
-            Frequently Asked Questions
-          </h2>
-          <Accordion type="single" collapsible className="w-full">
-            {[
-              {
-                question: "What is BARK Blink?",
-                answer: "BARK Blink is a platform that allows developers to create fast and efficient Solana actions and applications."
-              },
-              {
-                question: "How do I get started with BARK Blink?",
-                answer: "You can get started by exploring our documentation and signing up for our services."
-              },
-              {
-                question: "Is there any cost to use BARK Blink?",
-                answer: "BARK Blink offers a range of free and premium features. Please refer to our pricing page for more details."
-              },
-              {
-                question: "Can I integrate BARK Blink with existing applications?",
-                answer: "Yes, BARK Blink is designed to integrate seamlessly with your existing applications."
-              },
-            ].map((faq, index) => (
-              <AccordionItem value={`item-${index}`} key={index}>
-                <AccordionTrigger className="text-left">
-                  <span className="flex items-center">
-                    <Plus className="h-5 w-5 mr-2 flex-shrink-0 accordion-icon" />
-                    {faq.question}
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent>
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </section>
-
-      {/* Subscribe Section */}
-<section className="py-12 bg-gray-50">
-  <div className="max-w-3xl mx-auto px-4 text-center">
-    <h2 className="text-2xl font-bold text-gray-900">Stay Updated!</h2>
-    <p className="mt-2 text-gray-500">Subscribe for the latest news on BARK Blink and Solana development.</p>
-    <form className="mt-6" onSubmit={handleSubscribe}>
-      <div className="flex flex-col sm:flex-row sm:justify-center">
-        <Input
-          type="email"
-          placeholder="Your Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mb-2 sm:mb-0 sm:mr-2 border-gray-300"
-        />
-        <Button
-          type="submit"
-          disabled={loading}
-          className={`bg-primary text-primary-foreground ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {loading ? 'Subscribing...' : 'Subscribe'}
-        </Button>
-      </div>
-      {error && <p className="mt-2 text-red-600">{error}</p>}
-      {success && <p className="mt-2 text-green-600">{success}</p>}
-    </form>
+{/* FAQ Section */}
+<section className="py-20">
+  <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 className="text-3xl font-extrabold text-center text-gray-900 sm:text-4xl mb-8">
+      Frequently Asked Questions
+    </h2>
+    <Accordion type="single" collapsible className="w-full">
+      {[
+        { question: "What is BARK Blink?", answer: "BARK Blink is a platform that allows developers to create fast and efficient Solana actions and applications." },
+        { question: "How do I get started with BARK Blink?", answer: "You can get started by exploring our documentation and signing up for our services." },
+        { question: "Is there any cost to use BARK Blink?", answer: "BARK Blink offers a range of free and premium features. Please refer to our pricing page for more details." },
+        { question: "Can I integrate BARK Blink with existing applications?", answer: "Yes, BARK Blink is designed to integrate seamlessly with your existing applications." },
+      ].map(({ question, answer }, index) => (
+        <AccordionItem value={`item-${index}`} key={index}>
+          <AccordionTrigger className="text-left">
+            <span className="flex items-center">
+              <Plus className="h-5 w-5 mr-2 flex-shrink-0 accordion-icon" />
+              {question}
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>{answer}</AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
   </div>
 </section>
 
@@ -271,18 +230,16 @@ export default function BARKBlinkLanding() {
 <footer className="bg-gray-800 py-8">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
     <div className="flex justify-center space-x-4">
-      <a href="#" aria-label="Twitter">
-        <FontAwesomeIcon icon={faTwitter} className="h-5 w-5" />
-      </a>
-      <a href="#" aria-label="Discord">
-        <FontAwesomeIcon icon={faDiscord} className="h-5 w-5" />
-      </a>
-      <a href="#" aria-label="GitHub">
-        <FontAwesomeIcon icon={faGithub} className="h-5 w-5" />
-      </a>
-      <a href="#" aria-label="Medium">
-        <FontAwesomeIcon icon={faMedium} className="h-5 w-5" />
-      </a>
+      {[
+        { icon: faTwitter, label: "Twitter" },
+        { icon: faDiscord, label: "Discord" },
+        { icon: faGithub, label: "GitHub" },
+        { icon: faMedium, label: "Medium" },
+      ].map(({ icon, label }) => (
+        <a key={label} href="#" aria-label={label}>
+          <FontAwesomeIcon icon={icon} className="h-5 w-5" />
+        </a>
+      ))}
     </div>
     <p className="mt-4 text-sm">&copy; 2024 BARK Protocol. All rights reserved.</p>
   </div>
