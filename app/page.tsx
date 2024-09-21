@@ -122,7 +122,7 @@ export default function BARKBlinkLanding() {
           </div>
           <div className="flex items-center space-x-4">
             <Link href="/#" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Home</Link>
-            <Link href="/features" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Features</Link>
+            <Link href="/pages/blink/create-blink" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Create Blink</Link>
             <Link href="/pages/services" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Services</Link>
             <Link href="/#" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">FAQ</Link>
             <Link href="https://gitbook.com/" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Documentation</Link>
