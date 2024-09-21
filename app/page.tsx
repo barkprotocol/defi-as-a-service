@@ -94,9 +94,9 @@ export default function BARKBlinkLanding() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-<section className="relative bg-gray-50 pt-20 pb-32 px-4 sm:px-6 lg:px-8 text-center">
-  <div className="absolute inset-0">
+    {/* Hero Section */}
+     <section className="relative bg-gray-50 pt-20 pb-32 px-4 sm:px-6 lg:px-8 text-center">
+      <div className="absolute inset-0">
     <img
       src="https://"
       alt="Background"
@@ -149,8 +149,8 @@ export default function BARKBlinkLanding() {
       </section>
 
     {/* Blink Actions and Use Cases Section */}
-    <section className="py-20">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section className="py-20 bg-gray-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="lg:text-center">
       <h2 className="text-base text-primary font-semibold tracking-wide uppercase">Blink Actions Ecosystem</h2>
       <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
@@ -185,10 +185,10 @@ export default function BARKBlinkLanding() {
 </section>
 
 {/* Blinkboard Section */}
-<section className="py-20 bg-gray-50">
+<section className="py-20 bg-gray-950">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Explore the Blinkboard</h2>
-    <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+    <h2 className="text-3xl font-extrabold text-white sm:text-4xl">Explore the Blinkboard</h2>
+    <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-300">
       The Blinkboard showcases a variety of Solana applications powered by BARK Blink. Discover innovative use cases and solutions.
     </p>
     <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -197,10 +197,10 @@ export default function BARKBlinkLanding() {
         { title: "User-Friendly Interface", description: "Navigate through applications effortlessly with our intuitive UI." },
         { title: "Community Contributions", description: "Explore applications created by our vibrant developer community." },
       ].map((blinkboardItem, index) => (
-        <Card key={index} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <Card key={index} className="bg-gray-950 shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-950">
           <CardContent className="p-6">
-            <h3 className="mt-5 text-lg font-medium text-gray-900">{blinkboardItem.title}</h3>
-            <p className="mt-2 text-base text-gray-500">{blinkboardItem.description}</p>
+            <h3 className="mt-5 text-lg font-medium text-white">{blinkboardItem.title}</h3>
+            <p className="mt-2 text-base text-gray-300">{blinkboardItem.description}</p>
           </CardContent>
         </Card>
       ))}
