@@ -252,12 +252,12 @@ export default function DonationsPage() {
                   <SelectContent>
                     {['SOL', 'BARK', 'USDC'].map((curr) => (
                       <SelectItem key={curr} value={curr}>
-                        <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center justify-between w-full mr-1">
                           <div className="flex items-center space-x-2">
                             <CurrencyIcon currency={curr} />
                             <span className="font-medium">{curr}</span>
                           </div>
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
                             ${prices[curr]?.toFixed(2) || '-.--'}
                           </span>
                         </div>
