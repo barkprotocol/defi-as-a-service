@@ -1,20 +1,22 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTwitter, faDiscord, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons'
-import { Zap, Shield, Coins, Code, Layers, Cpu, Gift, Users, CreditCard, Repeat, LockIcon, Image as ImageIcon } from 'lucide-react'
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import axios from 'axios'
-import Link from 'next/link'
-import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { Navbar } from '@/components/ui/layout/navbar'
+import React, { useState, useEffect, useCallback } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitter, faDiscord, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
+import { Zap, Shield, Coins, Code, Layers, Cpu, Gift, Users, CreditCard, Repeat, LockIcon, Image as ImageIcon, Wallet, Moon, Sun } from 'lucide-react';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from 'next-themes';
+import { WalletConnect } from '@/components/wallet-connect';
 
 const featureList = [
   { icon: Zap, title: "Lightning-Fast Transactions", description: "Execute Solana transactions with unprecedented speed and efficiency." },
@@ -23,7 +25,7 @@ const featureList = [
   { icon: Code, title: "Intuitive Blink SDK", description: "Develop Solana applications quickly with our user-friendly Blink SDK." },
   { icon: Layers, title: "Seamless Integration", description: "Effortlessly integrate Solana functionality into existing applications." },
   { icon: Cpu, title: "Scalable Infrastructure", description: "Built to handle high-volume transactions for growing dApps and user bases." },
-]
+];
 
 const blinkActions = [
   { icon: Gift, name: 'Instant Donations', description: 'Enable seamless, low-fee donations on Solana. Perfect for non-profits and fundraising campaigns.' },
@@ -32,7 +34,7 @@ const blinkActions = [
   { icon: Repeat, name: 'Token Swaps', description: 'Create decentralized token swap functionality with optimal routing and minimal slippage on Solana.' },
   { icon: LockIcon, name: 'Staking', description: 'Build efficient staking protocols leveraging Solana\'s high-speed, low-cost infrastructure.' },
   { icon: ImageIcon, name: 'Compressed NFTs', description: 'Create and manage compressed NFTs on Solana, enabling scalable and cost-effective NFT projects.' },
-]
+];
 
 const faqItems = [
   { question: "What is BARK Blink?", answer: "BARK Blink is a platform that allows developers to create fast and efficient Solana actions and applications." },
@@ -40,20 +42,32 @@ const faqItems = [
   { question: "Is there any cost to use BARK Blink?", answer: "BARK Blink offers a range of free and premium features. Please refer to our pricing page for more details." },
   { question: "What kind of support does BARK Blink offer?", answer: "We offer comprehensive documentation, community forums, and dedicated support for our premium users." },
   { question: "Can I integrate BARK Blink with existing Solana projects?", answer: "Yes, BARK Blink is designed to seamlessly integrate with existing Solana projects, enhancing their functionality and performance." },
-]
+];
 
 export default function BARKBlinkLanding() {
-  const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [blinkText, setBlinkText] = useState('BLINK');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isSignedUp, setIsSignedUp] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  const blinkEffect = useCallback(() => {
+    setBlinkText(prev => (prev === 'BLINK' ? '' : 'BLINK'));
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(blinkEffect, 500);
+    return () => clearInterval(interval);
+  }, [blinkEffect]);
 
   const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     if (!email) {
-      toast.error('Please enter a valid email address.')
-      setLoading(false)
-      return
+      toast.error('Please enter a valid email address.');
+      setLoading(false);
+      return;
     }
 
     try {
@@ -65,24 +79,60 @@ export default function BARKBlinkLanding() {
           'Authorization': `apikey ${process.env.NEXT_PUBLIC_MAILCHIMP_API_KEY}`,
           'Content-Type': 'application/json',
         },
-      })
+      });
 
       if (response.status === 200) {
-        toast.success('Thank you for subscribing!')
-        setEmail('')
+        toast.success('Thank you for subscribing!');
+        setEmail('');
       } else {
-        toast.error('Something went wrong. Please try again.')
+        toast.error('Something went wrong. Please try again.');
       }
     } catch (error) {
-      toast.error('Subscription failed. Please check your email and try again.')
+      toast.error('Subscription failed. Please check your email and try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
+  const handleSignUp = () => {
+    if (!isSignedUp) {
+      setIsSignedUp(true);
+      toast.success('Successfully signed up!');
+    } else {
+      toast.info('You are already signed up.');
+    }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
+
+      {/* Navigation */}
+      <nav className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-10 transition-colors duration-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
+          <div className="flex items-center">
+            <Link href="/">
+              <Image width={32} height={32} src="https://ucarecdn.com/74392932-2ff5-4237-a1fa-e0fd15725ecc/bark.svg" alt="BARK Blink Logo" />
+            </Link>
+            <span className="ml-2 text-xl font-bold text-gray-800 dark:text-white">BARK <span className="blink text-primary">{blinkText}</span></span>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Link href="/#" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Home</Link>
+            <Link href="/pages/actions" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Actions</Link>
+            <Link href="/pages/services" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Services</Link>
+            <Link href="/#" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">FAQ</Link>
+            <Link href="https://gitbook.com/" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Documentation</Link>
+            <WalletConnect />
+            <Button onClick={toggleTheme} variant="ghost" size="icon">
+              {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
+            </Button>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero Section */}
       <motion.section 
@@ -97,7 +147,7 @@ export default function BARKBlinkLanding() {
             <span className="block text-primary">with BARK Blink</span>
           </h1>
           <p className="mt-4 max-w-md mx-auto text-base text-gray-500 dark:text-gray-400 sm:text-lg md:text-xl">
-            With BARK Blink, users can effortlessly create lightning-fast actions on the Solana blockchain. Streamline your blockchain experience with our innovative Blink As A Service platform, designed for speed and efficiency.
+           With BARK Blink, users can effortlessly create lightning-fast actions on the Solana blockchain. Streamline your blockchain experience with our innovative Blink As A Service platform, designed for speed and efficiency.
           </p>
           <div className="mt-5 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Button
@@ -238,5 +288,5 @@ export default function BARKBlinkLanding() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
