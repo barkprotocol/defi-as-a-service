@@ -1,0 +1,14 @@
+diff --git a/lib/index.esm.js b/lib/index.esm.js
+index xxxxxxx..xxxxxxx 100644
+--- a/lib/index.esm.js
++++ b/lib/index.esm.js
+@@ -16,8 +16,7 @@ import bs58 from 'bs58';
+ import BN from 'bn.js';
+ import RpcClient from 'jayson/lib/client/browser';
+ import * as nodeFetch from 'node-fetch';
+-import RpcWebSocketCommonClient from 'rpc-websockets/dist/lib/client';
+-import WebsocketFactory from 'rpc-websockets/dist/lib/client/websocket';
++import { Client as RpcWebSocketCommonClient } from 'rpc-websockets';
+ import { keccak_256 } from '@noble/hashes/sha3';
+ import { secp256k1 } from '@noble/curves/secp256k1';
+ import { sha512 } from '@noble/hashes/sha512';
