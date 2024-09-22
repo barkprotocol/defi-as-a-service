@@ -226,7 +226,7 @@ export default function DonationsPage() {
         transition={{ duration: 0.5 }}
         className="max-w-6xl mx-auto"
       >
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-white">BARK Blink Donations</h1>
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-white">Donations</h1>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {memoizedCampaignCards}
@@ -316,15 +316,9 @@ export default function DonationsPage() {
                   Refresh Rates
                 </Button>
               </div>
-              <div className="flex justify-center">
-                <WalletMultiButton className="!bg-gray-900 hover:!bg-gray-800 !text-transparent !w-12 !h-12 !p-0 !rounded-full !transition-colors !duration-200 !flex !items-center !justify-center">
-                  <Wallet className="text-white" />
-                  <span className="sr-only">Connect Wallet</span>
-                </WalletMultiButton>
-              </div>
               <Button 
                 type="submit" 
-                className="w-full bg-[#CBB5A7] hover:bg-[#CBB5A7]/90 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#CBB5A7] focus:ring-opacity-50 shadow-lg"
+                className="w-full bg-gray-800 hover:bg-gray-900/90 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#CBB5A7] focus:ring-opacity-50 shadow-lg"
                 disabled={isLoading || !publicKey || !amount}
               >
                 {isLoading ? (
