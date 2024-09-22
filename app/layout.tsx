@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "BARK - Blink",
   description: "Blink As A Service dApp",
   keywords: ["BARK", "Blink", "dApp", "Solana", "NFT"],
-  author: "Your Name",
+  author: "BARK Protocol",
 };
 
 // Root layout component
@@ -33,13 +33,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-dark-gray`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-b from-gray-50 text-dark-gray`}>
         <Providers>
           <div className="min-h-screen flex flex-col">
             <main className="flex-grow">
               {children}
             </main>
-            <footer className="py-4 text-center bg-gray-100 dark:bg-gray-800">
+            <footer className="py-4 text-center bg-gray-50 dark:bg-gray-700">
               &copy; {new Date().getFullYear()} BARK Protocol. All rights reserved.
             </footer>
           </div>

@@ -10,7 +10,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const blinkTexts = ['BLINK', 'NFT', 'DONATIONS', 'CROWDFUNDING']
+const blinkTexts = ['BLINK', 'NFT', 'PAYMENTS', 'DONATIONS', 'CROWDFUNDING']
 
 const Logo = memo(() => {
   const logoSrc = "https://ucarecdn.com/f242e5dc-8813-47b4-af80-6e6dd43945a9/barkicon.png"
@@ -19,7 +19,7 @@ const Logo = memo(() => {
     <Link href="/" className="flex items-center group">
       <Image width={34} height={34} src={logoSrc} alt="BARK Blink Logo" className="w-9 h-9 transition-transform duration-300 group-hover:scale-110" />
       <span className="ml-3 text-lg font-bold text-gray-800 dark:text-white flex items-center">
-        <span className="text-lg">BLINK</span>
+        <span className="text-lg">BARK</span>
       </span>
     </Link>
   )
