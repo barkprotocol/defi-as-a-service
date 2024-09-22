@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/lib/use-toast"
 import { WalletConnect } from '@/components/wallet-connect'
 import { Loader2, Zap, ArrowRight, Trash2, Edit2, Eye, EyeOff, AlertCircle, Info, Upload, Download } from 'lucide-react'
 import Link from 'next/link'

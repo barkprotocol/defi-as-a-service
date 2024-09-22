@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2, Heart, RefreshCw, DollarSign, AlertTriangle, CheckCircle2, Wallet } from 'lucide-react'
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/lib/use-toast"
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { LAMPORTS_PER_SOL, PublicKey, Transaction, SystemProgram } from '@solana/web3.js'

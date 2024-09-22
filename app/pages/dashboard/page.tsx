@@ -14,7 +14,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { BarChart, Bell, DollarSign, Users, Plus, ArrowRight, Search, Moon, Sun, Image, CreditCard, Users as UsersIcon, RefreshCcw, Layers, Heart, LogIn, LogOut, UserPlus, AlertTriangle, Wallet, Settings as SettingsIcon, Send, HelpCircle, Globe } from 'lucide-react'
 import { useTheme } from "next-themes"
 import { useWallet } from '@solana/wallet-adapter-react'
-import { WalletButton } from '@/components/wallet-button'
+import { WalletButton } from '@/components/ui/wallet-button'
 import { TransactionHistory } from '@/components/transaction-history'
 import { CampaignManager } from '@/components/campaign-manager'
 import { Swap } from '@/components/swap'

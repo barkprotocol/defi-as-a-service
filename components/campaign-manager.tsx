@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/lib/use-toast"
 import { Plus, Edit2, Trash2 } from 'lucide-react'
 
 interface Campaign {

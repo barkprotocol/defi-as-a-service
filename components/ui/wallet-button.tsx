@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { Button } from "@/components/ui/button"
 import { Loader2, Wallet, ChevronDown } from 'lucide-react'
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/lib/use-toast"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,20 +22,13 @@ export function WalletButton() {
   const { connection } = useConnection()
   const [balance, setBalance] = useState<number | null>(null)
   const [isClient, setIsClient] = useState(false)
+  const { toast } = useToast()
 
   useEffect(() => {
     setIsClient(true)
   }, [])
 
-  useEffect(() => {
-    if (publicKey) {
-      fetchBalance()
-    } else {
-      setBalance(null)
-    }
-  }, [publicKey, connection])
-
-  const fetchBalance = async () => {
+  const fetchBalance = useCallback(async () => {
     if (publicKey) {
       try {
         const balance = await connection.getBalance(publicKey)
@@ -43,9 +36,22 @@ export function WalletButton() {
       } catch (error) {
         console.error('Failed to fetch balance:', error)
         setBalance(null)
+        toast({
+          title: "Balance Fetch Failed",
+          description: "Failed to fetch wallet balance. Please try again.",
+          variant: "destructive",
+        })
       }
     }
-  }
+  }, [publicKey, connection, toast])
+
+  useEffect(() => {
+    if (publicKey) {
+      fetchBalance()
+    } else {
+      setBalance(null)
+    }
+  }, [publicKey, fetchBalance])
 
   const handleConnect = async () => {
     try {
@@ -67,6 +73,11 @@ export function WalletButton() {
   const handleDisconnect = async () => {
     try {
       await disconnect()
+      toast({
+        title: "Wallet Disconnected",
+        description: "Your wallet has been disconnected successfully.",
+        variant: "default",
+      })
     } catch (error) {
       console.error('Failed to disconnect wallet:', error)
       toast({
@@ -87,7 +98,7 @@ export function WalletButton() {
 
   if (connecting) {
     return (
-      <Button variant="outline" disabled>
+      <Button variant="outline" disabled className="w-[180px]">
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         Connecting...
       </Button>
@@ -98,7 +109,7 @@ export function WalletButton() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="w-full justify-between">
+          <Button variant="outline" className="w-[180px] justify-between">
             <Wallet className="mr-2 h-4 w-4" />
             <span className="mx-2">{truncateAddress(publicKey.toBase58())}</span>
             <ChevronDown className="h-4 w-4" />
@@ -120,7 +131,7 @@ export function WalletButton() {
   }
 
   return (
-    <Button variant="outline" onClick={handleConnect}>
+    <Button variant="outline" onClick={handleConnect} className="w-[180px]">
       <Wallet className="mr-2 h-4 w-4" />
       Connect Wallet
     </Button>

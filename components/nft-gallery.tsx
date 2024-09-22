@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/lib/use-toast"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { NFTMinter } from './nft-minter'
 
