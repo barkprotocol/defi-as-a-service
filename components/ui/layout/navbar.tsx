@@ -10,13 +10,13 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const blinkTexts = ['BLINK', 'NFT', 'DONATIONS']
+const blinkTexts = ['BLINK', 'NFT', 'DONATIONS', 'CROWDFUNDING']
 
 const Logo = memo(() => (
   <Link href="/" className="flex items-center group">
     <Image width={34} height={34} src="https://ucarecdn.com/74392932-2ff5-4237-a1fa-e0fd15725ecc/bark.svg" alt="BARK Blink Logo" className="w-9 h-9 transition-transform duration-300 group-hover:scale-110" />
     <span className="ml-3 text-lg font-bold text-gray-800 dark:text-white flex items-center">
-      <span className="text-lg">BARK</span>
+      <span className="text-lg">BLINK</span>
       <span className="mx-0.4">&nbsp;</span>
     </span>
   </Link>
@@ -27,10 +27,10 @@ const BlinkText = memo(({ text }: { text: string }) => (
   <motion.span 
     key={text}
     initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 2, y: 0 }}
+    animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -10 }}
     transition={{ duration: 0.3 }}
-    className="text-primary text-lg"
+    className="text-[#CBB5A7] text-lg"
   >
     {text}
   </motion.span>
