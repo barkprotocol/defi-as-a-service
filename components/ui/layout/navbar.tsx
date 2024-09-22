@@ -12,15 +12,22 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const blinkTexts = ['BLINK', 'NFT', 'DONATIONS', 'CROWDFUNDING']
 
-const Logo = memo(() => (
-  <Link href="/" className="flex items-center group">
-    <Image width={34} height={34} src="https://ucarecdn.com/74392932-2ff5-4237-a1fa-e0fd15725ecc/bark.svg" alt="BARK Blink Logo" className="w-9 h-9 transition-transform duration-300 group-hover:scale-110" />
-    <span className="ml-3 text-lg font-bold text-gray-800 dark:text-white flex items-center">
-      <span className="text-lg">BLINK</span>
-      <span className="mx-0.4">&nbsp;</span>
-    </span>
-  </Link>
-))
+const Logo = memo(() => {
+  const { theme } = useTheme()
+  const logoSrc = theme === 'dark, light' 
+    ? "https://ucarecdn.com/f242e5dc-8813-47b4-af80-6e6dd43945a9/barkicon.png"
+    : "https://ucarecdn.com/f242e5dc-8813-47b4-af80-6e6dd43945a9/barkicon.png"
+
+  return (
+    <Link href="/" className="flex items-center group">
+      <Image width={34} height={34} src={logoSrc} alt="BARK Blink Logo" className="w-9 h-9 transition-transform duration-300 group-hover:scale-110" />
+      <span className="ml-3 text-lg font-bold text-gray-800 dark:text-white flex items-center">
+        <span className="text-lg">BLINK</span>
+        <span className="mx-0.4">&nbsp;</span>
+      </span>
+    </Link>
+  )
+})
 Logo.displayName = 'Logo'
 
 const BlinkText = memo(({ text }: { text: string }) => (
@@ -37,36 +44,40 @@ const BlinkText = memo(({ text }: { text: string }) => (
 ))
 BlinkText.displayName = 'BlinkText'
 
-const ThemeToggle = memo(({ theme, toggleTheme }: { theme: string | undefined, toggleTheme: () => void }) => (
-  <motion.div 
-    className="bg-gray-100 dark:bg-gray-700 rounded-md p-1 flex items-center"
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    <Button 
-      onClick={toggleTheme} 
-      variant="ghost" 
-      size="icon" 
-      className={`w-7 h-7 rounded-sm flex items-center justify-center transition-colors duration-200 ${
-        theme === 'dark' ? 'bg-transparent text-gray-400' : 'bg-white text-yellow-500 shadow-sm'
-      }`}
-      aria-label="Switch to dark mode"
+const ThemeToggle = memo(() => {
+  const { theme, setTheme } = useTheme()
+
+  return (
+    <motion.div 
+      className="bg-gray-100 dark:bg-gray-700 rounded-md p-1 flex items-center"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
-      <Moon className="h-4 w-4" />
-    </Button>
-    <Button 
-      onClick={toggleTheme} 
-      variant="ghost" 
-      size="icon" 
-      className={`w-7 h-7 rounded-sm flex items-center justify-center transition-colors duration-200 ${
-        theme === 'dark' ? 'bg-gray-600 text-yellow-300 shadow-sm' : 'bg-transparent text-gray-500'
-      }`}
-      aria-label="Switch to light mode"
-    >
-      <Sun className="h-4 w-4" />
-    </Button>
-  </motion.div>
-))
+      <Button 
+        onClick={() => setTheme('light')} 
+        variant="ghost" 
+        size="icon" 
+        className={`w-7 h-7 rounded-sm flex items-center justify-center transition-colors duration-200 ${
+          theme === 'dark' ? 'bg-transparent text-gray-400' : 'bg-white text-yellow-500 shadow-sm'
+        }`}
+        aria-label="Switch to light mode"
+      >
+        <Sun className="h-4 w-4" />
+      </Button>
+      <Button 
+        onClick={() => setTheme('dark')} 
+        variant="ghost" 
+        size="icon" 
+        className={`w-7 h-7 rounded-sm flex items-center justify-center transition-colors duration-200 ${
+          theme === 'dark' ? 'bg-gray-600 text-yellow-300 shadow-sm' : 'bg-transparent text-gray-500'
+        }`}
+        aria-label="Switch to dark mode"
+      >
+        <Moon className="h-4 w-4" />
+      </Button>
+    </motion.div>
+  )
+})
 ThemeToggle.displayName = 'ThemeToggle'
 
 const NavLinks = memo(({ mobile = false }: { mobile?: boolean }) => {
@@ -98,7 +109,7 @@ NavLinks.displayName = 'NavLinks'
 
 export function Navbar() {
   const [blinkText, setBlinkText] = useState('BLINK')
-  const { theme, setTheme } = useTheme()
+  const { theme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const { connected } = useWallet()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -113,10 +124,6 @@ export function Navbar() {
     }, 5000)
     return () => clearInterval(interval)
   }, [])
-
-  const toggleTheme = useCallback(() => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
-  }, [theme, setTheme])
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(prev => !prev)
@@ -145,7 +152,7 @@ export function Navbar() {
               <Wallet className="mr-1.5 h-3.5 w-3.5" />
               <span>{connected ? 'Connected' : 'Select Wallet'}</span>
             </WalletMultiButton>
-            <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+            <ThemeToggle />
           </div>
           <div className="md:hidden flex items-center">
             <motion.div whileTap={{ scale: 0.95 }}>
@@ -173,7 +180,7 @@ export function Navbar() {
                 <Wallet className="mr-1.5 h-3.5 w-3.5" />
                 <span>{connected ? 'Connected' : 'Select Wallet'}</span>
               </WalletMultiButton>
-              <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+              <ThemeToggle />
             </div>
           </motion.div>
         )}
