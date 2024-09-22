@@ -21,7 +21,7 @@ const USDC_COIN_ADDRESS = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwy
 const DONATION_WALLET = new PublicKey('BARKkeAwhTuFzcLHX4DjotRsmjXQ1MshGrZbn1CUQqMo')
 
 const CurrencyIcon = React.memo(({ currency }: { currency: string }) => {
-  const iconPath = `/icons/${currency.toLowerCase()}.svg`
+  const iconPath = `/icons/${currency.toLowerCase()}.png`
   return (
     <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700">
       <Image src={iconPath} alt={`${currency} icon`} width={24} height={24} />
