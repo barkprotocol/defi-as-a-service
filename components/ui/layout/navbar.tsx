@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, memo } from 'react'
+import React, { useState, useEffect, useCallback, memo, useId } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
@@ -13,17 +13,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 const blinkTexts = ['BLINK', 'NFT', 'DONATIONS', 'CROWDFUNDING']
 
 const Logo = memo(() => {
-  const { theme } = useTheme()
-  const logoSrc = theme === 'dark, light' 
-    ? "https://ucarecdn.com/f242e5dc-8813-47b4-af80-6e6dd43945a9/barkicon.png"
-    : "https://ucarecdn.com/f242e5dc-8813-47b4-af80-6e6dd43945a9/barkicon.png"
+  const logoSrc = "https://ucarecdn.com/f242e5dc-8813-47b4-af80-6e6dd43945a9/barkicon.png"
 
   return (
     <Link href="/" className="flex items-center group">
       <Image width={34} height={34} src={logoSrc} alt="BARK Blink Logo" className="w-9 h-9 transition-transform duration-300 group-hover:scale-110" />
       <span className="ml-3 text-lg font-bold text-gray-800 dark:text-white flex items-center">
         <span className="text-lg">BLINK</span>
-        <span className="mx-0.4">&nbsp;</span>
       </span>
     </Link>
   )
@@ -37,7 +33,7 @@ const BlinkText = memo(({ text }: { text: string }) => (
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -10 }}
     transition={{ duration: 0.3 }}
-    className="text-[#CBB5A7] text-lg"
+    className="text-[#CBB5A7] text-lg ml-2"
   >
     {text}
   </motion.span>
@@ -45,35 +41,22 @@ const BlinkText = memo(({ text }: { text: string }) => (
 BlinkText.displayName = 'BlinkText'
 
 const ThemeToggle = memo(() => {
-  const { theme, setTheme } = useTheme()
+  const { setTheme, resolvedTheme } = useTheme()
+
+  const toggleTheme = useCallback(() => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+  }, [setTheme, resolvedTheme])
 
   return (
-    <motion.div 
-      className="bg-gray-100 dark:bg-gray-700 rounded-md p-1 flex items-center"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
+    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
       <Button 
-        onClick={() => setTheme('light')} 
+        onClick={toggleTheme} 
         variant="ghost" 
         size="icon" 
-        className={`w-7 h-7 rounded-sm flex items-center justify-center transition-colors duration-200 ${
-          theme === 'dark' ? 'bg-transparent text-gray-400' : 'bg-white text-yellow-500 shadow-sm'
-        }`}
-        aria-label="Switch to light mode"
+        className="w-10 h-10 rounded-full"
+        aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
       >
-        <Sun className="h-4 w-4" />
-      </Button>
-      <Button 
-        onClick={() => setTheme('dark')} 
-        variant="ghost" 
-        size="icon" 
-        className={`w-7 h-7 rounded-sm flex items-center justify-center transition-colors duration-200 ${
-          theme === 'dark' ? 'bg-gray-600 text-yellow-300 shadow-sm' : 'bg-transparent text-gray-500'
-        }`}
-        aria-label="Switch to dark mode"
-      >
-        <Moon className="h-4 w-4" />
+        {resolvedTheme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
       </Button>
     </motion.div>
   )
@@ -81,25 +64,29 @@ const ThemeToggle = memo(() => {
 ThemeToggle.displayName = 'ThemeToggle'
 
 const NavLinks = memo(({ mobile = false }: { mobile?: boolean }) => {
-  const linkClass = mobile
-    ? "block text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-    : "text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-300 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+  const linkClass = `text-sm ${mobile ? 'block py-2' : ''} text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-300 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800`
 
   const links = [
     { href: "/", label: "Home" },
     { href: "/pages/actions", label: "Actions" },
     { href: "/pages/services", label: "Services" },
     { href: "/#", label: "FAQ" },
-    { href: "https://gitbook.com/", label: "Docs" },
+    { href: "https://gitbook.com/", label: "Docs", external: true },
   ]
 
   return (
     <>
       {links.map((link) => (
         <motion.div key={link.href} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Link href={link.href} className={linkClass}>
-            {link.label}
-          </Link>
+          {link.external ? (
+            <a href={link.href} className={linkClass} target="_blank" rel="noopener noreferrer">
+              {link.label}
+            </a>
+          ) : (
+            <Link href={link.href} className={linkClass}>
+              {link.label}
+            </Link>
+          )}
         </motion.div>
       ))}
     </>
@@ -109,10 +96,11 @@ NavLinks.displayName = 'NavLinks'
 
 export function Navbar() {
   const [blinkText, setBlinkText] = useState('BLINK')
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const { connected } = useWallet()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const mobileMenuId = useId()
 
   useEffect(() => {
     setMounted(true)
@@ -129,12 +117,30 @@ export function Navbar() {
     setIsMenuOpen(prev => !prev)
   }, [])
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape' && isMenuOpen) {
+      setIsMenuOpen(false)
+    }
+  }, [isMenuOpen])
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.addEventListener('keydown', handleKeyDown)
+    }
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isMenuOpen, handleKeyDown])
+
   if (!mounted) {
     return null
   }
 
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-20 transition-colors duration-300">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:p-2">
+        Skip to main content
+      </a>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <motion.div 
@@ -148,7 +154,10 @@ export function Navbar() {
           </motion.div>
           <div className="hidden md:flex items-center space-x-4">
             <NavLinks />
-            <WalletMultiButton className="!bg-black !text-white hover:!bg-gray-800 !rounded-md !px-4 !py-1.5 !text-xs !font-medium !transition-all !duration-300 !flex !items-center !justify-center !h-8 !shadow-md hover:!shadow-lg">
+            <WalletMultiButton 
+              className="!bg-black !text-white hover:!bg-gray-800 !rounded-md !px-4 !py-1.5 !text-xs !font-medium !transition-all !duration-300 !flex !items-center !justify-center !h-8 !shadow-md hover:!shadow-lg"
+              aria-label={connected ? 'Wallet connected' : 'Select wallet'}
+            >
               <Wallet className="mr-1.5 h-3.5 w-3.5" />
               <span>{connected ? 'Connected' : 'Select Wallet'}</span>
             </WalletMultiButton>
@@ -156,8 +165,16 @@ export function Navbar() {
           </div>
           <div className="md:hidden flex items-center">
             <motion.div whileTap={{ scale: 0.95 }}>
-              <Button onClick={toggleMenu} variant="ghost" size="icon" className="w-8 h-8 !p-1.5" aria-label="Toggle menu">
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <Button 
+                onClick={toggleMenu} 
+                variant="ghost" 
+                size="icon" 
+                className="w-10 h-10 !p-2" 
+                aria-label="Toggle menu"
+                aria-expanded={isMenuOpen}
+                aria-controls={mobileMenuId}
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
             </motion.div>
           </div>
@@ -166,6 +183,7 @@ export function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div 
+            id={mobileMenuId}
             className="md:hidden bg-white dark:bg-gray-900 shadow-lg"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -176,7 +194,10 @@ export function Navbar() {
               <NavLinks mobile />
             </div>
             <div className="px-4 py-3 flex justify-between items-center border-t border-gray-200 dark:border-gray-700">
-              <WalletMultiButton className="!bg-black !text-white hover:!bg-gray-800 !rounded-md !px-3 !py-1.5 !text-xs !font-medium !transition-all !duration-300 !flex !items-center !justify-center !h-8 !shadow-md hover:!shadow-lg">
+              <WalletMultiButton 
+                className="!bg-black !text-white hover:!bg-gray-800 !rounded-md !px-3 !py-1.5 !text-xs !font-medium !transition-all !duration-300 !flex !items-center !justify-center !h-8 !shadow-md hover:!shadow-lg"
+                aria-label={connected ? 'Wallet connected' : 'Select wallet'}
+              >
                 <Wallet className="mr-1.5 h-3.5 w-3.5" />
                 <span>{connected ? 'Connected' : 'Select Wallet'}</span>
               </WalletMultiButton>

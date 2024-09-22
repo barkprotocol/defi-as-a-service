@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Plus } from "lucide-react";
 
 const FAQSection = () => {
