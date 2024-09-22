@@ -43,6 +43,14 @@ const config: Config = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        
+        // Adding the new 'sand' color with hex #D0BFB4
+        sand: {
+          DEFAULT: '#D0BFB4',
+          light: '#CBB5A7',  // Optional lighter shade
+          dark: '#BBA597',   // Optional darker shade
+        },
+
         chart: {
           '1': 'hsl(var(--chart-1))',
           '2': 'hsl(var(--chart-2))',
@@ -50,6 +58,11 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+      },
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+        display: ['Oswald', 'sans-serif'],
+        body: ['Poppins', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -72,7 +85,13 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    
+    // Optional plugins for better typography and forms
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/forms"),
+  ],
 };
 
 export default config;

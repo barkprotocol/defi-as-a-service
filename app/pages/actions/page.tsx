@@ -15,42 +15,42 @@ const actions = [
     icon: Gift,
     title: 'Instant Donations',
     description: 'Enable seamless, low-fee donations on Solana. Perfect for non-profits and fundraising campaigns.',
-    link: '/actions/donations',
+    link: '/pages/donations/',
     category: 'Finance'
   },
   {
     icon: Users,
     title: 'Decentralized Crowdfunding',
     description: 'Launch and manage crowdfunding campaigns with transparent tracking on the Solana blockchain.',
-    link: '/actions/crowdfunding',
+    link: '/crowdfunding',
     category: 'Finance'
   },
   {
     icon: CreditCard,
     title: 'Micro-Payments',
     description: 'Implement fast, cost-effective micro-payment systems for content monetization and more.',
-    link: '/actions/micropayments',
+    link: '/micropayments',
     category: 'Finance'
   },
   {
     icon: Repeat,
     title: 'Token Swaps',
     description: 'Create decentralized token swap functionality with optimal routing and minimal slippage on Solana.',
-    link: '/actions/token-swaps',
+    link: '/token-swaps',
     category: 'Trading'
   },
   {
     icon: LockIcon,
     title: 'Staking',
     description: 'Build efficient staking protocols leveraging Solana\'s high-speed, low-cost infrastructure.',
-    link: '/actions/staking',
+    link: '/pages/staking',
     category: 'Finance'
   },
   {
     icon: ImageIcon,
     title: 'Compressed NFTs',
     description: 'Create and manage compressed NFTs on Solana, enabling scalable and cost-effective NFT projects.',
-    link: '/actions/compressed-nfts',
+    link: '/pages/compressed-nfts',
     category: 'NFT'
   }
 ]

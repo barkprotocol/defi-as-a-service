@@ -1,70 +1,93 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+import Image from 'next/image'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Loader2, Heart, RefreshCw, DollarSign } from 'lucide-react'
+import { Loader2, Heart, RefreshCw, DollarSign, AlertTriangle, CheckCircle2, Wallet } from 'lucide-react'
 import { useToast } from "@/components/ui/use-toast"
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { LAMPORTS_PER_SOL, PublicKey, Transaction, SystemProgram } from '@solana/web3.js'
 import { TOKEN_PROGRAM_ID, createTransferInstruction } from '@solana/spl-token'
 
-// Token addresses
+// NOTE: These are BARK public keys for development. Replace with actual keys in production.
 const BARK_TOKEN_ADDRESS = new PublicKey('2NTvEssJ2i998V2cMGT4Fy3JhyFnAzHFonDo9dbAkVrg')
-const USDC_TOKEN_ADDRESS = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+const USDC_COIN_ADDRESS = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+const DONATION_WALLET = new PublicKey('BARKkeAwhTuFzcLHX4DjotRsmjXQ1MshGrZbn1CUQqMo')
 
-const CurrencyIcon = ({ currency }: { currency: string }) => {
-  switch (currency) {
-    case 'SOL':
-      return (
-        <svg width="20" height="20" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="64" cy="64" r="64" fill="black"/>
-          <path d="M44.5164 86.8422C45.0132 86.3454 45.6941 86.0623 46.4055 86.0623H106.078C107.363 86.0623 108.006 87.6116 107.072 88.5459L93.4833 102.134C92.9865 102.631 92.3056 102.914 91.5942 102.914H31.9216C30.6368 102.914 29.9941 101.365 30.9278 100.431L44.5164 86.8422Z" fill="url(#paint0_linear)"/>
-          <path d="M44.5164 25.8658C45.0386 25.369 45.7195 25.0859 46.4055 25.0859H106.078C107.363 25.0859 108.006 26.6352 107.072 27.5695L93.4833 41.1581C92.9865 41.6549 92.3056 41.938 91.5942 41.938H31.9216C30.6368 41.938 29.9941 40.3887 30.9278 39.4544L44.5164 25.8658Z" fill="url(#paint1_linear)"/>
-          <path d="M93.4833 56.2207C92.9865 55.7239 92.3056 55.4408 91.5942 55.4408H31.9216C30.6368 55.4408 29.9941 56.9901 30.9278 57.9244L44.5164 71.513C45.0132 72.0098 45.6941 72.2929 46.4055 72.2929H106.078C107.363 72.2929 108.006 70.7436 107.072 69.8093L93.4833 56.2207Z" fill="url(#paint2_linear)"/>
-          <defs>
-            <linearGradient id="paint0_linear" x1="69.0001" y1="86.0623" x2="69.0001" y2="102.914" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#00FFA3"/>
-              <stop offset="1" stopColor="#DC1FFF"/>
-            </linearGradient>
-            <linearGradient id="paint1_linear" x1="69" y1="25.0859" x2="69" y2="41.938" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#00FFA3"/>
-              <stop offset="1" stopColor="#DC1FFF"/>
-            </linearGradient>
-            <linearGradient id="paint2_linear" x1="69.0001" y1="55.4408" x2="69.0001" y2="72.2929" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#00FFA3"/>
-              <stop offset="1" stopColor="#DC1FFF"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      )
-    case 'BARK':
-      return (
-        <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="50" fill="#F2994A"/>
-          <path d="M30 70V30H50C55.5228 30 60 34.4772 60 40C60 45.5228 55.5228 50 50 50H40V70H30Z" fill="white"/>
-          <path d="M50 50H40V60H50C55.5228 60 60 55.5228 60 50C60 44.4772 55.5228 40 50 40V50Z" fill="white"/>
-        </svg>
-      )
-    case 'USDC':
-      return (
-        <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="50" fill="#2775CA"/>
-          <path d="M50 75C63.8071 75 75 63.8071 75 50C75 36.1929 63.8071 25 50 25C36.1929 25 25 36.1929 25 50C25 63.8071 36.1929 75 50 75Z" fill="white"/>
-          <path d="M54.5 45.5C54.5 42.7386 52.2614 40.5 49.5 40.5C46.7386 40.5 44.5 42.7386 44.5 45.5V54.5C44.5 57.2614 46.7386 59.5 49.5 59.5C52.2614 59.5 54.5 57.2614 54.5 54.5V45.5Z" fill="#2775CA"/>
-          <path d="M60 50C60 44.4772 55.5228 40 50 40C44.4772 40 40 44.4772 40 50C40 55.5228 44.4772 60 50 60C55.5228 60 60 55.5228 60 50Z" stroke="#2775CA" strokeWidth="2"/>
-        </svg>
-      )
-    default:
-      return null
-  }
-}
+const CurrencyIcon = React.memo(({ currency }: { currency: string }) => {
+  const iconPath = `/icons/${currency.toLowerCase()}.svg`
+  return (
+    <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700">
+      <Image src={iconPath} alt={`${currency} icon`} width={24} height={24} />
+    </div>
+  )
+})
 
 const predefinedAmounts = [5, 10, 25, 50, 100]
+
+const campaigns = [
+  {
+    id: 'animal-shelter',
+    name: 'Animal Shelter Support',
+    description: 'Help us provide food, medical care, and shelter for rescued animals in need.',
+    image: '/placeholder.svg?height=200&width=400',
+    address: DONATION_WALLET,
+  },
+  {
+    id: 'tree-planting',
+    name: 'Tree Planting Initiative',
+    description: 'Support our efforts to combat deforestation and climate change by planting trees worldwide.',
+    image: '/placeholder.svg?height=200&width=400',
+    address: DONATION_WALLET,
+  },
+  {
+    id: 'clean-water',
+    name: 'Clean Water Project',
+    description: 'Help provide clean and safe drinking water to communities in developing countries.',
+    image: '/placeholder.svg?height=200&width=400',
+    address: DONATION_WALLET,
+  },
+  {
+    id: 'education',
+    name: 'Education for All',
+    description: 'Support programs that provide quality education and learning resources to underprivileged children.',
+    image: '/placeholder.svg?height=200&width=400',
+    address: DONATION_WALLET,
+  },
+]
+
+const CampaignCard = React.memo(({ campaign, isSelected, onClick }: { campaign: typeof campaigns[0], isSelected: boolean, onClick: () => void }) => (
+  <Card 
+    className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${isSelected ? 'ring-2 ring-[#CBB5A7]' : ''}`}
+    onClick={onClick}
+  >
+    <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
+      <Image
+        src={campaign.image}
+        alt={campaign.name}
+        layout="fill"
+        objectFit="cover"
+      />
+      {isSelected && (
+        <div className="absolute top-2 right-2 bg-[#CBB5A7] rounded-full p-1">
+          <CheckCircle2 className="h-6 w-6 text-white" />
+        </div>
+      )}
+    </div>
+    <CardHeader className="pb-2">
+      <CardTitle className="text-lg font-bold truncate">{campaign.name}</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">{campaign.description}</p>
+    </CardContent>
+  </Card>
+))
 
 export default function DonationsPage() {
   const [amount, setAmount] = useState('')
@@ -73,6 +96,8 @@ export default function DonationsPage() {
   const [prices, setPrices] = useState<Record<string, number>>({})
   const [isCustomAmount, setIsCustomAmount] = useState(false)
   const [usdEquivalent, setUsdEquivalent] = useState('0.00')
+  const [error, setError] = useState('')
+  const [selectedCampaign, setSelectedCampaign] = useState(campaigns[0])
   const { toast } = useToast()
   const { connection } = useConnection()
   const { publicKey, sendTransaction } = useWallet()
@@ -94,7 +119,7 @@ export default function DonationsPage() {
       setPrices({
         SOL: data.solana.usd,
         USDC: data['usd-coin'].usd,
-        BARK: 0.1 // Mocked price for BARK token
+        BARK: 0.0008 // Mocked price for BARK token
       })
     } catch (error) {
       console.error('Error fetching prices:', error)
@@ -124,6 +149,7 @@ export default function DonationsPage() {
     }
 
     setIsLoading(true)
+    setError('')
 
     try {
       const parsedAmount = parseFloat(amount)
@@ -133,19 +159,19 @@ export default function DonationsPage() {
         transaction.add(
           SystemProgram.transfer({
             fromPubkey: publicKey,
-            toPubkey: new PublicKey('DonationAddressxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'), // Replace with actual donation address
+            toPubkey: selectedCampaign.address,
             lamports: parsedAmount * LAMPORTS_PER_SOL,
           })
         )
       } else {
-        const tokenMintAddress = currency === 'BARK' ? BARK_TOKEN_ADDRESS : USDC_TOKEN_ADDRESS
+        const tokenMintAddress = currency === 'BARK' ? BARK_TOKEN_ADDRESS : USDC_COIN_ADDRESS
         const tokenAccountInfo = await connection.getTokenAccountsByOwner(publicKey, { mint: tokenMintAddress })
         const sourceTokenAccount = tokenAccountInfo.value[0].pubkey
 
         transaction.add(
           createTransferInstruction(
             sourceTokenAccount,
-            new PublicKey('DonationTokenAccountxxxxxxxxxxxxxxxxxxxxxxxx'), // Replace with actual donation token account
+            selectedCampaign.address,
             publicKey,
             parsedAmount * (10 ** (currency === 'USDC' ? 6 : 9)), // USDC has 6 decimals, BARK has 9
             [],
@@ -159,17 +185,13 @@ export default function DonationsPage() {
 
       toast({
         title: "Thank you for your donation!",
-        description: `You have donated ${amount} ${currency} (≈$${usdEquivalent} USD).`,
+        description: `You have donated ${amount} ${currency} (≈$${usdEquivalent} USD) to ${selectedCampaign.name}.`,
       })
       setAmount('')
       setIsCustomAmount(false)
     } catch (error) {
       console.error("Error processing donation:", error)
-      toast({
-        title: "Donation failed",
-        description: "There was an error processing your donation. Please try again.",
-        variant: "destructive",
-      })
+      setError('There was an error processing your donation. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -185,115 +207,158 @@ export default function DonationsPage() {
     setIsCustomAmount(true)
   }
 
+  const memoizedCampaignCards = useMemo(() => (
+    campaigns.map((campaign) => (
+      <CampaignCard
+        key={campaign.id}
+        campaign={campaign}
+        isSelected={selectedCampaign.id === campaign.id}
+        onClick={() => setSelectedCampaign(campaign)}
+      />
+    ))
+  ), [selectedCampaign])
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <Card className="max-w-md mx-auto bg-white shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold text-center text-gray-800">Make a Donation</CardTitle>
-          <CardDescription className="text-center text-gray-600">Your support helps us make a difference</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleDonation} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="currency" className="text-lg font-semibold text-gray-700">Select Currency</Label>
-              <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="w-full bg-gray-50 border-gray-300">
-                  <SelectValue placeholder="Select Currency" />
-                </SelectTrigger>
-                <SelectContent>
-                  {['SOL', 'BARK', 'USDC'].map((curr) => (
-                    <SelectItem key={curr} value={curr}>
-                      <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center">
-                          <CurrencyIcon currency={curr} />
-                          <span className="ml-2 font-medium">{curr}</span>
-                        </div>
-                        <span className="text-sm text-gray-500">
-                          ${prices[curr]?.toFixed(2) || '-.--'}
-                        </span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-6xl mx-auto"
+      >
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-white">BARK Blink Donations</h1>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {memoizedCampaignCards}
+        </div>
+
+        <Card className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-[#CBB5A7] to-[#E6D5CA] text-white p-6">
+            <CardTitle className="text-3xl font-bold text-center">Make a Donation</CardTitle>
+            <CardDescription className="text-center text-gray-100">Your support helps us make a difference</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold mb-2">Selected Campaign: {selectedCampaign.name}</h2>
+              <p className="text-gray-600 dark:text-gray-400">{selectedCampaign.description}</p>
             </div>
-            <div className="space-y-2">
-              <Label className="text-lg font-semibold text-gray-700">Select Amount</Label>
-              <div className="grid grid-cols-3 gap-2">
-                {predefinedAmounts.map((presetAmount) => (
+            <form onSubmit={handleDonation} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="currency" className="text-lg font-semibold text-gray-700 dark:text-gray-300">Select Currency</Label>
+                <Select value={currency} onValueChange={setCurrency}>
+                  <SelectTrigger id="currency" className="w-full bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                    <SelectValue placeholder="Select Currency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['SOL', 'BARK', 'USDC'].map((curr) => (
+                      <SelectItem key={curr} value={curr}>
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center space-x-2">
+                            <CurrencyIcon currency={curr} />
+                            <span className="font-medium">{curr}</span>
+                          </div>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                            ${prices[curr]?.toFixed(2) || '-.--'}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-lg font-semibold text-gray-700 dark:text-gray-300">Select Amount</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {predefinedAmounts.map((presetAmount) => (
+                    <Button
+                      key={presetAmount}
+                      type="button"
+                      variant={amount === presetAmount.toString() && !isCustomAmount ? "default" : "outline"}
+                      onClick={() => handleAmountSelect(presetAmount)}
+                      className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    >
+                      {presetAmount} {currency}
+                    </Button>
+                  ))}
                   <Button
-                    key={presetAmount}
                     type="button"
-                    variant={amount === presetAmount.toString() && !isCustomAmount ? "default" : "outline"}
-                    onClick={() => handleAmountSelect(presetAmount)}
-                    className="w-full bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    variant={isCustomAmount ? "default" : "outline"}
+                    onClick={() => setIsCustomAmount(true)}
+                    className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
                   >
-                    {presetAmount} {currency}
+                    Custom
                   </Button>
-                ))}
-                <Button
-                  type="button"
-                  variant={isCustomAmount ? "default" : "outline"}
-                  onClick={() => setIsCustomAmount(true)}
-                  className="w-full bg-gray-100 text-gray-800 hover:bg-gray-200"
-                >
-                  Custom
+                </div>
+              </div>
+              {isCustomAmount && (
+                <div className="space-y-2">
+                  <Label htmlFor="amount" className="text-lg font-semibold text-gray-700 dark:text-gray-300">Custom Amount</Label>
+                  <Input
+                    id="amount"
+                    type="number"
+                    placeholder="Enter custom amount"
+                    value={amount}
+                    onChange={handleCustomAmountChange}
+                    required
+                    min="0.000001"
+                    step="0.000001"
+                    className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                  />
+                </div>
+              )}
+              <div className="flex justify-between items-center bg-gray-50 dark:bg-gray-700 p-3 rounded-md border border-gray-300 dark:border-gray-600">
+                <span className="text-lg font-semibold flex items-center text-gray-800 dark:text-gray-200">
+                  <DollarSign className="h-5 w-5 mr-1 text-gray-600 dark:text-gray-400" />
+                  {usdEquivalent} USD
+                </span>
+                <Button type="button" variant="outline" size="sm" onClick={fetchPrices} className="bg-transparent border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh Rates
                 </Button>
               </div>
-            </div>
-            {isCustomAmount && (
-              <div className="space-y-2">
-                <Label htmlFor="amount" className="text-lg font-semibol
-d text-gray-700">Custom Amount</Label>
-                <Input
-                  id="amount"
-                  type="number"
-                  placeholder="Enter custom amount"
-                  value={amount}
-                  onChange={handleCustomAmountChange}
-                  required
-                  min="0.000001"
-                  step="0.000001"
-                  className="bg-gray-50 border-gray-300"
-                />
+              <div className="flex justify-center">
+                <WalletMultiButton className="!bg-gray-900 hover:!bg-gray-800 !text-transparent !w-12 !h-12 !p-0 !rounded-full !transition-colors !duration-200 !flex !items-center !justify-center">
+                  <Wallet className="text-white" />
+                  <span className="sr-only">Connect Wallet</span>
+                </WalletMultiButton>
               </div>
-            )}
-            <div className="flex justify-between items-center bg-gray-50 p-3 rounded-md border border-gray-300">
-              <span className="text-lg font-semibold flex items-center text-gray-800">
-                <DollarSign className="h-5 w-5 mr-1 text-gray-600" />
-                {usdEquivalent} USD
-              </span>
-              <Button type="button" variant="outline" size="sm" onClick={fetchPrices} className="bg-transparent border-gray-300 text-gray-700 hover:bg-gray-100">
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh Rates
+              <Button 
+                type="submit" 
+                className="w-full bg-[#CBB5A7] hover:bg-[#CBB5A7]/90 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#CBB5A7] focus:ring-opacity-50 shadow-lg"
+                disabled={isLoading || !publicKey || !amount}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Heart className="mr-2 h-5 w-5" />
+                    Donate Now
+                  </>
+                )}
               </Button>
-            </div>
-            <div className="flex justify-center">
-              <WalletMultiButton className="!bg-gray-100 !text-gray-800 hover:!bg-gray-200" />
-            </div>
-            <Button 
-              type="submit" 
-              className="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 shadow-lg"
-              disabled={isLoading || !publicKey || !amount}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Heart className="mr-2 h-5 w-5" />
-                  Donate Now
-                </>
-              )}
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter className="text-center text-sm text-gray-600">
-          Your donation is securely processed on the Solana blockchain and greatly appreciated.
-        </CardFooter>
-      </Card>
+            </form>
+          </CardContent>
+          <CardFooter className="text-center text-sm text-gray-600 dark:text-gray-400">
+            Your donation is securely processed on the Solana blockchain and greatly appreciated.
+          </CardFooter>
+        </Card>
+      </motion.div>
+      <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="mt-4 p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 rounded-lg flex items-center justify-center"
+          >
+            <AlertTriangle className="mr-2 h-5 w-5" />
+            {error}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

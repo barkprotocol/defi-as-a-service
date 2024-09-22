@@ -1,27 +1,30 @@
 import { useState, useCallback } from 'react'
 
-export interface Toast {
-  id: string
-  title?: string
+type ToastType = 'success' | 'error' | 'info' | 'warning'
+
+interface ToastOptions {
+  title: string
   description?: string
-  action?: React.ReactNode
+  duration?: number
+  type?: ToastType
+}
+
+interface Toast extends ToastOptions {
+  id: number
 }
 
 export function useToast() {
   const [toasts, setToasts] = useState<Toast[]>([])
 
-  const toast = useCallback(({ title, description, action }: Omit<Toast, 'id'>) => {
-    const id = Math.random().toString(36).substr(2, 9)
-    const newToast: Toast = { id, title, description, action }
-    setToasts((currentToasts) => [...currentToasts, newToast])
-    return id
+  const toast = useCallback(({ title, description, duration = 3000, type = 'info' }: ToastOptions) => {
+    const id = Date.now()
+    const newToast: Toast = { id, title, description, duration, type }
+    setToasts((prevToasts) => [...prevToasts, newToast])
+
+    setTimeout(() => {
+      setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
+    }, duration)
   }, [])
 
-  const dismiss = useCallback((id: string) => {
-    setToasts((currentToasts) => currentToasts.filter((toast) => toast.id !== id))
-  }, [])
-
-  return { toast, dismiss, toasts }
+  return { toast, toasts }
 }
-
-export { Toast }
